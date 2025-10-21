@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LLMテストケース自動生成ツール</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css">
+    <style>
+        body {
+            margin: 2rem auto;
+            max-width: 960px;
+        }
+        .error {
+            background: #ffe5e5;
+            border-left: 4px solid #f25f5c;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+        }
+        form textarea {
+            min-height: 6rem;
+        }
+        form button {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>LLMテストケース自動生成ツール</h1>
+    <p>
+        テスト対象の一次情報源（URLなど）を入力すると、LLMが人間が実行しやすい形式でテストケースを自動生成し、Excelファイルとしてダウンロードできます。
+    </p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form method="post">
+        <label for="source_url">テスト対象URL <span style="color: #f25f5c;">*</span></label>
+        <input type="url" id="source_url" name="source_url" placeholder="https://example.com/spec" required />
+
+        <label for="context">補足情報（任意）</label>
+        <textarea id="context" name="context" placeholder="仕様のポイントや想定利用者など、追加で伝えたい内容があれば入力してください。"></textarea>
+
+        <button type="submit">Excelファイルを生成する</button>
+    </form>
+    <section>
+        <h2>出力されるテストケース構成</h2>
+        <ul>
+            <li>テストID・タイトル</li>
+            <li>前提条件・テストデータ</li>
+            <li>手順（ステップごとに整理）</li>
+            <li>期待結果</li>
+            <li>優先度・備考</li>
+        </ul>
+        <p>
+            生成されたExcelでは、テスト担当者が実行状況を記録しやすいように、ステータスや担当者を追記できる余白を確保しています。
+        </p>
+    </section>
+</body>
+</html>
